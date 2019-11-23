@@ -34,8 +34,22 @@ class UsuarioModel extends ChangeNotifier {
 		return result;
 	}
 
-	Future<FirebaseUser> updateProfile(UserUpdateInfo userUpdateInfo) async {
+	Future<FirebaseUser> updateProfile(
+		UserUpdateInfo userUpdateInfo,
+		String email,
+		String new_password,
+		String old_password
+	) async {
 		_usuario.updateProfile(userUpdateInfo);
+		if (email != null)
+			await _usuario.updateEmail(email);
+		if (old_password != null)
+			await _firebaseAuth.signInWithEmailAndPassword(
+				email: _usuario.email,
+				password: old_password
+			);
+		if (new_password != null)
+			_usuario.updatePassword(new_password);
 
 		notifyListeners();
 		return _usuario;
