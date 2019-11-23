@@ -1,4 +1,5 @@
 import 'package:canhanho/repositories/usuario.dart';
+import 'package:canhanho/utils/validator_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 										),
 										keyboardType: TextInputType.emailAddress,
 										autovalidate: true,
-										validator: emailValidator,
+										validator: textValidator("o e-mail"),
 									),
 									const SizedBox(height: 12.0),
 									TextFormField(
@@ -84,8 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
 	}
 
 	void logIn() async {
-		print(_emailController.text);
-		print(_passwordController.text);
 		Provider.of<UsuarioModel>(context, listen: false)
 			.signIn(
 			_emailController.text,
@@ -173,21 +172,5 @@ class _LoginScreenState extends State<LoginScreen> {
 
 		void signIn() {
 			Navigator.of(context).pushNamed("/signup");
-		}
-
-		String emailValidator(String value) {
-			if(value.isEmpty) {
-				return "Informe um e-mail";
-			}
-			return null;
-		}
-
-		String passwordValidator(String value) {
-			if (value.isEmpty) {
-				return "Informe uma senha";
-			} else if (value.length < 7) {
-				return "A senha precisa conter ao menos 6 dígitos";
-			}
-			return null;
 		}
 	}
