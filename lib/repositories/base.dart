@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:canhanho/repositories/usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
