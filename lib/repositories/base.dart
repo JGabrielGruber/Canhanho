@@ -17,6 +17,10 @@ abstract class Base {
 	Base.fromSnapshot(DocumentSnapshot snapshot)
 		: this.fromMap(null, null, reference: null);
 
+	Map<String, dynamic> toMap() {
+		return null;
+	}
+
 	@override
 	String toString() => "Base<$uid>";
 
@@ -40,6 +44,10 @@ abstract class BaseListModel extends ChangeNotifier {
 	}
 
 	Future<ObserverList<Base>> pop(Base base) async {
+		return _list;
+	}
+
+	Future<ObserverList<Base>> update(Base base) async {
 		return _list;
 	}
 
