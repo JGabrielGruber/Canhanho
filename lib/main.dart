@@ -1,3 +1,4 @@
+import 'package:canhanho/repositories/despesa.dart';
 import 'package:canhanho/repositories/receita.dart';
 import 'package:canhanho/repositories/usuario.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ void main() => runApp(
         providers: [
             ChangeNotifierProvider(builder: (context) => UsuarioModel()),
             ChangeNotifierProvider(builder: (context) => ReceitaListModel()),
+            ChangeNotifierProvider(builder: (context) => DespesaListModel()),
         ],
         child: MaterialApp(
             title: "Canhanho",
