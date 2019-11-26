@@ -7,6 +7,7 @@ class FormUsuario extends StatefulWidget {
 	final UserInfo userInfo;
 	final Function updateInfo;
 	final bool isEdit;
+	bool termos = false;
 
 	FormUsuario({this.userInfo, this.updateInfo, this.isEdit = false});
 
@@ -54,11 +55,14 @@ class _FormUsuarioState extends State<FormUsuario> {
 									decoration: const InputDecoration(
 										labelText: "E-mail",
 									),
-									keyboardType: TextInputType.emailAddress
+									keyboardType: TextInputType.emailAddress,
+									autovalidate: !widget.isEdit,
 								),
 								TextFormField(
 									controller: _newPasswordController,
-									validator: _passwordEdited ? passwordValidator : null,
+									validator: widget.isEdit ?
+										(_passwordEdited ? passwordValidator : null) :
+										passwordValidator,
 									decoration: const InputDecoration(
 										labelText: "Senha",
 									),
@@ -66,9 +70,10 @@ class _FormUsuarioState extends State<FormUsuario> {
 									onChanged: (arg) {
 										if (widget.isEdit)
 											setState(() {
-											  _passwordEdited = true;
+												_passwordEdited = true;
 											});
 									},
+									autovalidate: !widget.isEdit,
 								),
 								Visibility(
 									child: TextFormField(
@@ -82,21 +87,47 @@ class _FormUsuarioState extends State<FormUsuario> {
 									),
 									visible: _passwordEdited,
 								),
+								Visibility(
+									child: Row(
+										mainAxisAlignment: MainAxisAlignment.end,
+										children: <Widget>[
+											Switch(
+												value: widget.termos,
+												onChanged: (value) {
+													widget.termos = value;
+												},
+											),
+											Text(
+												"Aceito os "
+											),
+											FlatButton(
+												padding: EdgeInsets.only(left: 0, right: 8),
+												textColor: Colors.blue,
+												child: const Text("Termos de Contrato"),
+												onPressed: resetForm,
+											)
+										],
+									),
+									visible: !widget.isEdit,
+								)
 							],
 						),
 					),
 					ButtonBar(
 						children: <Widget>[
+							widget.isEdit ?
 							FlatButton(
 								child: const Text("CANCELAR"),
 								onPressed: resetForm,
-							),
+							) : null,
 							RaisedButton(
-								child: const Text("ATUALIZAR"),
+								child: Text(widget.isEdit ? "ATUALIZAR" : "CADASTRAR"),
 								color: Colors.blue,
 								textColor: Colors.white,
 								onPressed: () {
-									if (_formKey.currentState.validate()) {
+									print((widget.isEdit ? true : widget.termos));
+									if (_formKey.currentState.validate()
+										&& (widget.isEdit ? true : widget.termos)) {
 										update();
 									}
 								},
@@ -114,7 +145,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 		_newPasswordController.text = "";
 		_oldPasswordController.text = "";
 		setState(() {
-		  _passwordEdited = false;
+			_passwordEdited = false;
 		});
 	}
 
@@ -127,77 +158,112 @@ class _FormUsuarioState extends State<FormUsuario> {
 			? null : _newPasswordController.text;
 		String oldPassword = _oldPasswordController.text.isEmpty
 			? null : _oldPasswordController.text;
-		widget.updateInfo(
-			user,
-			email,
-			newPassword,
-			oldPassword
-		).then((arg) {
-			resetForm();
-			showDialog(
-				context: context,
-				builder: (BuildContext context) {
-					return AlertDialog(
-						title: Text("SUCESSO"),
-						content: Container(
-							child: Text(
-								"Seus dados foram atualizados."
-							),
-						),
-						actions: <Widget>[
-							FlatButton(
-								child: Text('Ok'),
-								onPressed: () {
-									Navigator.of(context).pop();
-								},
-							),
-						],
-					);
-				});
-		}).catchError((error) {
-			switch (error.code) {
-				case "ERROR_WRONG_PASSWORD":
-					showDialog(
-						context: context,
-						builder: (BuildContext context) {
-							return AlertDialog(
-								title: Text("SENHA INCORRETA"),
-								content: Container(
-									child: Text(
-										"A antiga senha informada está incorreta."
-									),
+		if (widget.isEdit) {
+			widget.updateInfo(
+				user,
+				email,
+				newPassword,
+				oldPassword
+			).then((arg) {
+				resetForm();
+				showDialog(
+					context: context,
+					builder: (BuildContext context) {
+						return AlertDialog(
+							title: Text("SUCESSO"),
+							content: Container(
+								child: Text(
+									"Seus dados foram atualizados."
 								),
-								actions: <Widget>[
-									FlatButton(
-										child: Text('Ok'),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									),
-								],
-							);
-						});
-					break;
-				default:
-					showDialog(
-						context: context,
-						builder: (BuildContext context) {
-							return AlertDialog(
-								title: Text("Erro"),
-								content: Container(
-									child: Text(error.code),
+							),
+							actions: <Widget>[
+								FlatButton(
+									child: Text('Ok'),
+									onPressed: () {
+										Navigator.of(context).pop();
+									},
 								),
-								actions: <Widget>[
-									FlatButton(
-										child: Text('Ok'),
-										onPressed: () {
-											Navigator.of(context).pop();
-										},
-									),
-								],
-							);
-						});
-			}
-		});
+							],
+						);
+					});
+			}).catchError((error) {
+				print(error);
+				if (error.code != null) {
+					switch (error.code) {
+						case "ERROR_WRONG_PASSWORD":
+							showDialog(
+								context: context,
+								builder: (BuildContext context) {
+									return AlertDialog(
+										title: Text("SENHA INCORRETA"),
+										content: Container(
+											child: Text(
+												"A antiga senha informada está incorreta."
+											),
+										),
+										actions: <Widget>[
+											FlatButton(
+												child: Text('Ok'),
+												onPressed: () {
+													Navigator.of(context).pop();
+												},
+											),
+										],
+									);
+								});
+							break;
+						default:
+							showDialog(
+								context: context,
+								builder: (BuildContext context) {
+									return AlertDialog(
+										title: Text("Erro"),
+										content: Container(
+											child: Text(error.code),
+										),
+										actions: <Widget>[
+											FlatButton(
+												child: Text('Ok'),
+												onPressed: () {
+													Navigator.of(context).pop();
+												},
+											),
+										],
+									);
+								});
+					}
+				} else {
+					print(error);
+				}
+			});
+		} else {
+			widget.updateInfo(
+				user.displayName,
+				email,
+				newPassword
+			).catchError((error) {
+				showDialog(
+					context: context,
+					builder: (BuildContext context) {
+						return AlertDialog(
+							title: Text("ERRO"),
+							content: Container(
+								child: Text(
+									error
+								),
+							),
+							actions: <Widget>[
+								FlatButton(
+									child: Text('Ok'),
+									onPressed: () {
+										Navigator.of(context).pop();
+									},
+								),
+							],
+						);
+					});
+			});
+		}
+
 	}
 }
