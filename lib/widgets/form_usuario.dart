@@ -249,7 +249,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 							title: Text("ERRO"),
 							content: Container(
 								child: Text(
-									error
+									error.code
 								),
 							),
 							actions: <Widget>[
