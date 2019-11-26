@@ -1,6 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
+class User implements UserInfo {
+	String email = "";
+	String displayName = "";
+	String providerId = "";
+	String uid = "";
+	String phoneNumber = "";
+	String photoUrl = "";
+}
+
 class UsuarioModel extends ChangeNotifier {
 
 	final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
