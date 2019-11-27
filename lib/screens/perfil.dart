@@ -1,4 +1,7 @@
+import 'package:canhanho/repositories/usuario.dart';
+import 'package:canhanho/widgets/form_usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PerfilScreen extends StatelessWidget {
 	@override
@@ -8,12 +11,11 @@ class PerfilScreen extends StatelessWidget {
 				title: Text('Perfil Screen'),
 			),
 			body: Center(
-				child: RaisedButton(
-					child: Text('Launch screen'),
-					onPressed: () {
-						// Navigate to the second screen when tapped.
-					},
-				),
+				child: FormUsuario(
+					isEdit: true,
+					userInfo: Provider.of<UsuarioModel>(context).usuario,
+					updateInfo: Provider.of<UsuarioModel>(context).updateProfile,
+				)
 			),
 		);
 	}
