@@ -72,4 +72,8 @@ class UsuarioModel extends ChangeNotifier {
 			return false;
 		}
 	}
+
+	Future<void> signOut() async {
+		return _firebaseAuth.signOut();
+	}
 }
