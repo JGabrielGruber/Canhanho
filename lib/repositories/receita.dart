@@ -66,7 +66,7 @@ class ReceitaListModel extends ChangeNotifier implements BaseListModel {
 					"${_collection}/${_usuario.usuario.uid}/${_collection}"
 				);
 		}
-		_list = await _reference.getDocuments().then((query) {
+		_list = await _reference.orderBy("data").getDocuments().then((query) {
 			return fromSnapshot(query.documents.toList());
 		});
 		notifyListeners();
