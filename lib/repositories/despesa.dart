@@ -37,7 +37,7 @@ class Despesa implements Base {
 	}
 
 	@override
-	String toString() => "Receita<$uid:$valor>";
+	String toString() => "Despesa<$uid:$valor>";
 
 }
 
@@ -46,7 +46,7 @@ class DespesaListModel extends ChangeNotifier implements BaseListModel {
 	final Firestore _firestoreInstance = Firestore.instance;
 	final UsuarioModel _usuario = UsuarioModel();
 
-	final String _collection = "receitas";
+	final String _collection = "despesas";
 	static CollectionReference _reference;
 	static ObserverList<Despesa> _list = null;
 
