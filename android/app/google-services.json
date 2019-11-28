@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "792241810715",
+    "firebase_url": "https://canhanho-92b79.firebaseio.com",
+    "project_id": "canhanho-92b79",
+    "storage_bucket": "canhanho-92b79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:792241810715:android:a3efec728ec269c82437be",
+        "android_client_info": {
+          "package_name": "br.unc.canhanho"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "792241810715-m7rulg8fqg792g5mprk1279q94ovcjd6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAGAwKo3fWBPfIjWHQ9WHJ9jaDL8CD6cQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "792241810715-m7rulg8fqg792g5mprk1279q94ovcjd6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
