@@ -5,7 +5,6 @@ import 'package:canhanho/repositories/usuario.dart';
 import 'package:canhanho/screens/despesas.dart';
 import 'package:canhanho/screens/receitas.dart';
 import 'package:charts_flutter/flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
@@ -84,27 +83,45 @@ class DashboardScreen extends StatelessWidget {
 	static Series<Despesa, DateTime> _despesas;
 	static Series<Base, DateTime> _totais;
 	static bool created = false;
+	static dynamic valor = 0;
 
 	DashboardScreen();
 
 	@override
 	Widget build(BuildContext context) {
+		print(valor);
 		return SingleChildScrollView(
 			scrollDirection: prefix0.Axis.vertical,
 			child: Container(
 					padding: EdgeInsets.all(20),
-					child: new SizedBox(
-						height: 400,
-						child: new TimeSeriesChart(
-							_createSeries(context),
-							dateTimeFactory: const LocalDateTimeFactory(),
-							behaviors: [
-								new SeriesLegend()
-							],
-							animate: false,
-							defaultRenderer: LineRendererConfig(includePoints: true),
-						),
-					)
+					child: Column(
+						children: <Widget>[
+							Row(
+								children: <Widget>[
+									Text("Total atual: ", style: TextStyle(
+										fontSize: 20,
+										fontWeight: FontWeight.bold
+									)),
+									Text(valor.toString(), style: TextStyle(
+										fontSize: 20
+									))
+								],
+							),
+							Padding(padding: EdgeInsets.all(5)),
+							new SizedBox(
+								height: 400,
+								child: new TimeSeriesChart(
+									_createSeries(context),
+									dateTimeFactory: const LocalDateTimeFactory(),
+									behaviors: [
+										new SeriesLegend()
+									],
+									animate: false,
+									defaultRenderer: LineRendererConfig(includePoints: true),
+								),
+							),
+						],
+					),
 				),
 		);
 	}
@@ -131,10 +148,10 @@ class DashboardScreen extends StatelessWidget {
 					});
 				}
 			});
-
-			_total = _createTotais(_dataReceita, _dataDespesa);
 			created = true;
 		}
+
+		_total = _createTotais(_dataReceita, _dataDespesa);
 
 		if (_receitas == null) {
 			_receitas = new Series<Receita, DateTime>(
@@ -175,7 +192,7 @@ class DashboardScreen extends StatelessWidget {
 					i = item as Despesa;
 				return i.valor;
 			},
-			data: _total.length < 1 ? _createTotais(_dataReceita, _dataDespesa) : _total
+			data: _total
 		);
 
 		return [
@@ -242,6 +259,7 @@ class DashboardScreen extends StatelessWidget {
 				}
 			}
 		}
+		valor = total.length > 0 ? (total.elementAt(total.length - 1) as Receita).valor : 0;
 		return total;
 	}
 
