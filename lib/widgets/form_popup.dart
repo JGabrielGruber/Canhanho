@@ -38,7 +38,7 @@ class _FormBaseState extends State<FormBase> {
 	@override
 	Widget build(BuildContext context) {
 		 return AlertDialog(
-			title: Text('Adicionar Despesa'),
+			title: Text('Adicionar ${widget.base is Receita ? "Receita" : "Despesa"}'),
 			content: SingleChildScrollView(
 				child: SafeArea(
 					child: Container(
@@ -133,7 +133,7 @@ class _FormBaseState extends State<FormBase> {
 		} else {
 			item = widget.base as Despesa;
 		}
-		_valorController.updateValue(item.valor != null ? item.valor : 0);
+		_valorController.updateValue(item.valor != null ?  item.valor.toDouble() : 0);
 		_descricaoController.text = item.descricao != null ? item.descricao : "";
 		_dataController.text = item.data != null ?
 			item.data.toDate().toString() : DateTime.now().toString();
@@ -157,5 +157,6 @@ class _FormBaseState extends State<FormBase> {
 			);
 		}
 		widget.updateInfo(item);
+		Navigator.of(context).pop();
 	}
 }
