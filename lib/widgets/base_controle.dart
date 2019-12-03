@@ -69,7 +69,7 @@ class _ControleBaseState extends State<ControleBase> {
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.add),
 				onPressed: _showForm,
-				backgroundColor: widget.type is Receita ? Colors.green : Colors.red,
+				backgroundColor: widget.type() is Receita ? Colors.green : Colors.red,
 			),
 		);
 	}

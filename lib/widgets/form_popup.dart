@@ -146,14 +146,14 @@ class _FormBaseState extends State<FormBase> {
 			item.descricao = _descricaoController.text;
 			item.valor = _valorController.numberValue;
 			item.data = Timestamp.fromMicrosecondsSinceEpoch(
-				DateTime.parse(_dataController.text).millisecondsSinceEpoch
+				DateTime.parse(_dataController.text).microsecondsSinceEpoch
 			);
 		} else {
 			item = widget.base as Despesa;
 			item.descricao = _descricaoController.text;
 			item.valor = _valorController.numberValue;
 			item.data = Timestamp.fromMicrosecondsSinceEpoch(
-				DateTime.parse(_dataController.text).millisecondsSinceEpoch
+				DateTime.parse(_dataController.text).microsecondsSinceEpoch
 			);
 		}
 		widget.updateInfo(item);

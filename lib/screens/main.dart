@@ -89,7 +89,6 @@ class DashboardScreen extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
-		print(valor);
 		return SingleChildScrollView(
 			scrollDirection: prefix0.Axis.vertical,
 			child: Container(
@@ -128,28 +127,25 @@ class DashboardScreen extends StatelessWidget {
 
 	/// Create one series with sample hard coded data.
 	static List<Series<Base, DateTime>> _createSeries(BuildContext context) {
-		if (!created) {
-			Provider.of<ReceitaListModel>(context).get().then((ObserverList<Receita> observerList) {
-				if (observerList.length != _dataReceita.length) {
-					observerList.forEach((Receita receita) {
-						if (_dataReceita.indexWhere((test) => test.uid == receita.uid) < 0) {
-							_dataReceita.add(receita);
-						}
-					});
-				}
-			});
+		Provider.of<ReceitaListModel>(context).get().then((ObserverList<Receita> observerList) {
+			if (observerList.length != _dataReceita.length) {
+				observerList.forEach((Receita receita) {
+					if (_dataReceita.indexWhere((test) => test.uid == receita.uid) < 0) {
+						_dataReceita.add(receita);
+					}
+				});
+			}
+		});
 
-			Provider.of<DespesaListModel>(context).get().then((ObserverList<Despesa> observerList) {
-				if (observerList.length != _dataDespesa.length) {
-					observerList.forEach((Despesa despesa) {
-						if (_dataDespesa.indexWhere((test) => test.uid == despesa.uid) < 0) {
-							_dataDespesa.add(despesa);
-						}
-					});
-				}
-			});
-			created = true;
-		}
+		Provider.of<DespesaListModel>(context).get().then((ObserverList<Despesa> observerList) {
+			if (observerList.length != _dataDespesa.length) {
+				observerList.forEach((Despesa despesa) {
+					if (_dataDespesa.indexWhere((test) => test.uid == despesa.uid) < 0) {
+						_dataDespesa.add(despesa);
+					}
+				});
+			}
+		});
 
 		_total = _createTotais(_dataReceita, _dataDespesa);
 
@@ -259,7 +255,13 @@ class DashboardScreen extends StatelessWidget {
 				}
 			}
 		}
-		valor = total.length > 0 ? (total.elementAt(total.length - 1) as Receita).valor : 0;
+		var el = total.elementAt(total.length - 1);
+		var val;
+		if (el is Receita)
+			val = el as Receita;
+		else
+			val = el as Despesa;
+		valor = total.length > 0 ? val.valor : 0;
 		return total;
 	}
 
