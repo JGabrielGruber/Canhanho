@@ -87,6 +87,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 									controller: _nomeController,
 									validator: textValidator("o seu nome"),
 									decoration: const InputDecoration(
+										icon: Icon(Icons.person),
 										labelText: "Nome",
 									),
 									textCapitalization: TextCapitalization.words,
@@ -96,6 +97,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 									controller: _emailController,
 									validator: textValidator("o seu e-mail"),
 									decoration: const InputDecoration(
+										icon: Icon(Icons.email),
 										labelText: "E-mail",
 									),
 									keyboardType: TextInputType.emailAddress,
@@ -107,6 +109,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 									(_passwordEdited ? passwordValidator : null) :
 									passwordValidator,
 									decoration: const InputDecoration(
+										icon: Icon(Icons.security),
 										labelText: "Senha",
 									),
 									obscureText: true,

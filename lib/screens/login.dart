@@ -39,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
 									TextFormField(
 										controller: _emailController,
 										decoration: const InputDecoration(
+											icon: Icon(Icons.email),
 											labelText: "E-mail",
 										),
 										keyboardType: TextInputType.emailAddress,
@@ -49,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
 									TextFormField(
 										controller: _passwordController,
 										decoration: const InputDecoration(
+											icon: Icon(Icons.security),
 											labelText: "Senha",
 										),
 										obscureText: true,
