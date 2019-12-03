@@ -42,7 +42,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 			source: ImageSource.gallery
 		).then((file) {
 			setState(() {
-			  _file = file;
+				_file = file;
 			});
 		});
 	}
@@ -57,28 +57,29 @@ class _FormUsuarioState extends State<FormUsuario> {
 						child: Column(
 							children: <Widget>[
 								GestureDetector(
-									child: Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
+									child: Provider.of<UsuarioModel>(context).usuario != null &&
+										Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
 									new ClipRRect(
 										borderRadius: new BorderRadius.circular(180.0),
 										child: Image.network(
-											Provider.of<UsuarioModel>(context).usuario.photoUrl,
+											Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
 											width: 120,
 											height: 120,
 										),
 									) :
-									(_file.path != null ?
-										new ClipRRect(
-											borderRadius: new BorderRadius.circular(180.0),
-											child: Image.file(
-												_file,
-												width: 120,
-												height: 120,
-											),
-										) :
-										Icon(
-											Icons.account_circle,
-											size: 120,
-										)
+									(_file != null ?
+									new ClipRRect(
+										borderRadius: new BorderRadius.circular(180.0),
+										child: Image.file(
+											_file,
+											width: 120,
+											height: 120,
+										),
+									) :
+									Icon(
+										Icons.account_circle,
+										size: 120,
+									)
 									),
 									onTap: _pickPhoto,
 								),
@@ -103,8 +104,8 @@ class _FormUsuarioState extends State<FormUsuario> {
 								TextFormField(
 									controller: _newPasswordController,
 									validator: widget.isEdit ?
-										(_passwordEdited ? passwordValidator : null) :
-										passwordValidator,
+									(_passwordEdited ? passwordValidator : null) :
+									passwordValidator,
 									decoration: const InputDecoration(
 										labelText: "Senha",
 									),
@@ -283,7 +284,8 @@ class _FormUsuarioState extends State<FormUsuario> {
 			widget.updateInfo(
 				user.displayName,
 				email,
-				newPassword
+				newPassword,
+				_file
 			).catchError((error) {
 				showDialog(
 					context: context,

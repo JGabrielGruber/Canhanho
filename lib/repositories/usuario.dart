@@ -46,7 +46,7 @@ class UsuarioModel extends ChangeNotifier {
 		String nome,
 		String email,
 		String password,
-		{File file = null}
+		File file
 		) async {
 		AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
 			email: email,
@@ -69,7 +69,7 @@ class UsuarioModel extends ChangeNotifier {
 		String email,
 		String new_password,
 		String old_password,
-		{File file = null}
+		File file
 		) async {
 		_usuario.updateProfile(userUpdateInfo);
 		if (email != null)
@@ -81,6 +81,7 @@ class UsuarioModel extends ChangeNotifier {
 			);
 		if (new_password != null)
 			_usuario.updatePassword(new_password);
+		print(file.path);
 		if (file != null)
 			updatePhoto(file);
 		notifyListeners();
@@ -110,7 +111,9 @@ class UsuarioModel extends ChangeNotifier {
 		await _reference.putFile(file).onComplete;
 		var info = UserUpdateInfo();
 		info.photoUrl = await _reference.getDownloadURL();
+		print(info.photoUrl);
 		await _usuario.updateProfile(info);
+		print(_usuario.photoUrl);
 		return _usuario;
 	}
 }
