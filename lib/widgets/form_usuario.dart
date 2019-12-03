@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 class FormUsuario extends StatefulWidget {
 
 	final UserInfo userInfo;
-	final Function updateInfo;
+	final Function updateInfo, showTermos;
 	final bool isEdit;
 	bool termos = false;
 
-	FormUsuario({this.userInfo, this.updateInfo, this.isEdit = false});
+	FormUsuario({this.userInfo, this.updateInfo, this.isEdit = false, this.showTermos = null});
 
 	@override
 	_FormUsuarioState createState() => _FormUsuarioState();
@@ -104,7 +104,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 												padding: EdgeInsets.only(left: 0, right: 8),
 												textColor: Colors.blue,
 												child: const Text("Termos de Contrato"),
-												onPressed: resetForm,
+												onPressed: widget.showTermos,
 											)
 										],
 									),

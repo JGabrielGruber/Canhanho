@@ -22,18 +22,16 @@ class _LoginScreenState extends State<LoginScreen> {
 				child: ListView(
 					padding: const EdgeInsets.symmetric(horizontal: 24.0),
 					children: <Widget>[
-						const SizedBox(height: 80.0),
+						const SizedBox(height: 50.0),
 						Column(
 							children: <Widget>[
-								Image.asset(''),
-								const SizedBox(height: 30.0),
-								Text(
-									"Canhanho",
-									style: Theme.of(context).textTheme.headline,
+								Image(
+									image: AssetImage("assets/canhanho.png"),
+									height: 225,
 								),
 							],
 						),
-						const SizedBox(height: 100.0),
+						const SizedBox(height: 10.0),
 						Form(
 							key: _formKey,
 							child: Column(
