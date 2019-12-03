@@ -13,7 +13,7 @@ class _DespesasScreenState extends State<DespesasScreen> {
 	Widget build(BuildContext context) {
 
 		return ControleBase(
-			stream: Provider.of<DespesaListModel>(context).get().asStream(),
+			stream: Provider.of<DespesaListModel>(context, listen: false).get().asStream(),
 			onAdd: Provider.of<DespesaListModel>(context).add,
 			onUpdate: Provider.of<DespesaListModel>(context).update,
 			type: () => Despesa(),

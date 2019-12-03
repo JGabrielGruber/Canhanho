@@ -58,7 +58,7 @@ class _ControleBaseState extends State<ControleBase> {
 									);
 								else
 									return Center(
-										child: CircularProgressIndicator(),
+										child: Text(""),
 									);
 							}
 						),

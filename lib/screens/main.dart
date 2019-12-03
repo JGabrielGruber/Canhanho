@@ -255,13 +255,18 @@ class DashboardScreen extends StatelessWidget {
 				}
 			}
 		}
-		var el = total.elementAt(total.length - 1);
-		var val;
-		if (el is Receita)
-			val = el as Receita;
-		else
-			val = el as Despesa;
-		valor = total.length > 0 ? val.valor : 0;
+		if (total.length > 0) {
+			var el = total.elementAt(total.length - 1);
+			var val;
+			if (el is Receita)
+				val = el as Receita;
+			else
+				val = el as Despesa;
+			valor = val.valor;
+		} else {
+			valor = 0.0;
+		}
+
 		return total;
 	}
 
