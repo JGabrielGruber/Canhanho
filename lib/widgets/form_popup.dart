@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:canhanho/repositories/base.dart';
 import 'package:canhanho/repositories/despesa.dart';
 import 'package:canhanho/repositories/receita.dart';
@@ -27,6 +28,12 @@ class _FormBaseState extends State<FormBase> {
 	final MoneyMaskedTextController _valorController = new MoneyMaskedTextController(leftSymbol: 'R\$ ');
 	final TextEditingController	_descricaoController = TextEditingController();
 	final TextEditingController _dataController = TextEditingController();
+
+	@override
+	void initState() {
+		resetForm();
+		super.initState();
+	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -106,6 +113,7 @@ class _FormBaseState extends State<FormBase> {
 					child: const Text("CANCELAR"),
 					onPressed: () {
 						this.resetForm();
+						Navigator.of(context).pop();
 					},
 				) : null,
 				FlatButton(
@@ -119,9 +127,16 @@ class _FormBaseState extends State<FormBase> {
 	}
 
 	void resetForm() {
-		_valorController.updateValue(0);
-		_descricaoController.text = "";
-		_dataController.text = "";
+		var item;
+		if (widget.base is Receita) {
+			item = widget.base as Receita;
+		} else {
+			item = widget.base as Despesa;
+		}
+		_valorController.updateValue(item.valor != null ? item.valor : 0);
+		_descricaoController.text = item.descricao != null ? item.descricao : "";
+		_dataController.text = item.data != null ?
+			item.data.toDate().toString() : DateTime.now().toString();
 	}
 
 	void updateForm() {
