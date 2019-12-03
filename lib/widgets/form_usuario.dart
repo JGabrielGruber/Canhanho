@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'package:canhanho/repositories/usuario.dart';
 import 'package:canhanho/utils/validator_usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FormUsuario extends StatefulWidget {
 
@@ -25,10 +29,22 @@ class _FormUsuarioState extends State<FormUsuario> {
 		_newPasswordController = TextEditingController(),
 		_oldPasswordController = TextEditingController();
 
+	File _file;
+
 	@override
 	void initState() {
 		resetForm();
 		super.initState();
+	}
+
+	Future _pickPhoto() async {
+		await ImagePicker.pickImage(
+			source: ImageSource.gallery
+		).then((file) {
+			setState(() {
+				_file = file;
+			});
+		});
 	}
 
 	@override
@@ -40,6 +56,33 @@ class _FormUsuarioState extends State<FormUsuario> {
 						key: _formKey,
 						child: Column(
 							children: <Widget>[
+								GestureDetector(
+									child: Provider.of<UsuarioModel>(context).usuario != null &&
+										Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
+									new ClipRRect(
+										borderRadius: new BorderRadius.circular(180.0),
+										child: Image.network(
+											Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
+											width: 120,
+											height: 120,
+										),
+									) :
+									(_file != null ?
+									new ClipRRect(
+										borderRadius: new BorderRadius.circular(180.0),
+										child: Image.file(
+											_file,
+											width: 120,
+											height: 120,
+										),
+									) :
+									Icon(
+										Icons.account_circle,
+										size: 120,
+									)
+									),
+									onTap: _pickPhoto,
+								),
 								TextFormField(
 									controller: _nomeController,
 									validator: textValidator("o seu nome"),
@@ -61,8 +104,8 @@ class _FormUsuarioState extends State<FormUsuario> {
 								TextFormField(
 									controller: _newPasswordController,
 									validator: widget.isEdit ?
-										(_passwordEdited ? passwordValidator : null) :
-										passwordValidator,
+									(_passwordEdited ? passwordValidator : null) :
+									passwordValidator,
 									decoration: const InputDecoration(
 										labelText: "Senha",
 									),
@@ -163,7 +206,8 @@ class _FormUsuarioState extends State<FormUsuario> {
 				user,
 				email,
 				newPassword,
-				oldPassword
+				oldPassword,
+				_file
 			).then((arg) {
 				resetForm();
 				showDialog(
@@ -240,7 +284,8 @@ class _FormUsuarioState extends State<FormUsuario> {
 			widget.updateInfo(
 				user.displayName,
 				email,
-				newPassword
+				newPassword,
+				_file
 			).catchError((error) {
 				showDialog(
 					context: context,
