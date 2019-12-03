@@ -33,7 +33,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 
 	@override
 	Widget build(BuildContext context) {
-		return Container(
+		return SafeArea(
 			child: Column(
 				children: <Widget>[
 					Form(

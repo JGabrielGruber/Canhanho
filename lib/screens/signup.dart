@@ -45,13 +45,15 @@ class SignupScreen extends StatelessWidget {
 			appBar: AppBar(
 				title: Text('Cadastrar conta'),
 			),
-			body: Container(
-				padding: EdgeInsets.all(24.0),
-				child: FormUsuario(
-					isEdit: false,
-					userInfo: new User(),
-					updateInfo: Provider.of<UsuarioModel>(context).signUp,
-					showTermos: _showTermos,
+			body: SingleChildScrollView(
+				child: Container(
+					padding: EdgeInsets.all(24.0),
+					child: FormUsuario(
+						isEdit: false,
+						userInfo: new User(),
+						updateInfo: Provider.of<UsuarioModel>(context).signUp,
+						showTermos: _showTermos,
+					),
 				)
 			),
 		);
