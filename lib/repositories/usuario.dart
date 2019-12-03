@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class User implements UserInfo {
 	String email = "";
@@ -13,9 +16,20 @@ class User implements UserInfo {
 class UsuarioModel extends ChangeNotifier {
 
 	final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+	final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+	static StorageReference _reference;
 	static FirebaseUser _usuario;
 
 	FirebaseUser get usuario => _usuario;
+
+	UsuarioModel() {
+		if (_usuario != null) {
+			_reference = _firebaseStorage.ref()
+				.child(
+				"users/${_usuario.uid}"
+			);
+		}
+	}
 
 	Future<AuthResult> signIn(String email, String password) async {
 		AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
@@ -28,7 +42,12 @@ class UsuarioModel extends ChangeNotifier {
 		return result;
 	}
 
-	Future<AuthResult> signUp(String nome, String email, String password) async {
+	Future<AuthResult> signUp(
+		String nome,
+		String email,
+		String password,
+		{File file = null}
+		) async {
 		AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
 			email: email,
 			password: password
@@ -37,7 +56,9 @@ class UsuarioModel extends ChangeNotifier {
 		info.displayName = nome;
 
 		_usuario = result.user;
-		_usuario.updateProfile(info);
+		await _usuario.updateProfile(info);
+		if (file != null)
+			updatePhoto(file);
 
 		notifyListeners();
 		return result;
@@ -47,8 +68,9 @@ class UsuarioModel extends ChangeNotifier {
 		UserUpdateInfo userUpdateInfo,
 		String email,
 		String new_password,
-		String old_password
-	) async {
+		String old_password,
+		{File file = null}
+		) async {
 		_usuario.updateProfile(userUpdateInfo);
 		if (email != null)
 			await _usuario.updateEmail(email);
@@ -59,7 +81,8 @@ class UsuarioModel extends ChangeNotifier {
 			);
 		if (new_password != null)
 			_usuario.updatePassword(new_password);
-
+		if (file != null)
+			updatePhoto(file);
 		notifyListeners();
 		return _usuario;
 	}
@@ -75,5 +98,19 @@ class UsuarioModel extends ChangeNotifier {
 
 	Future<void> signOut() async {
 		return _firebaseAuth.signOut();
+	}
+
+	Future<FirebaseUser> updatePhoto(File file) async {
+		if (_reference == null && _usuario != null) {
+			_reference = _firebaseStorage.ref()
+				.child(
+				"users/${_usuario.uid}"
+			);
+		}
+		await _reference.putFile(file).onComplete;
+		var info = UserUpdateInfo();
+		info.photoUrl = await _reference.getDownloadURL();
+		await _usuario.updateProfile(info);
+		return _usuario;
 	}
 }
