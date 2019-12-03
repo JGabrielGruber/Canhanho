@@ -1,5 +1,6 @@
 import 'package:canhanho/utils/validator_usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FormUsuario extends StatefulWidget {
@@ -96,9 +97,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 										children: <Widget>[
 											Switch(
 												value: widget.termos,
-												onChanged: (value) {
-													widget.termos = value;
-												},
+												onChanged: (value) => setState(() => widget.termos = value),
 											),
 											Text(
 												"Aceito os "
