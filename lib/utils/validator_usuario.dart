@@ -11,7 +11,7 @@ textValidator(String substring) {
 String passwordValidator(String value) {
 	if (value.isEmpty) {
 		return "Informe uma senha";
-	} else if (value.length < 7) {
+	} else if (value.length < 6) {
 		return "A senha precisa conter ao menos 6 dígitos";
 	}
 	return null;
