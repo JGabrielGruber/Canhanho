@@ -10,7 +10,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+
+	int _selectedIndex = 0;
+	static List<Widget> _widgetsOptions = <Widget>[
+		DashboardScreen(),
+		ReceitasScreen(),
+		DespesasScreen(),
+	];
+
+	void _onItemTapped(int index) {
+		setState(() {
+			_selectedIndex = index;
+		});
+	}
+
 	@override
 	Widget build(BuildContext context) {
 		return DefaultTabController(
@@ -46,29 +65,28 @@ class MainScreen extends StatelessWidget {
 							],
 						),
 					),
-					bottom: TabBar(
-						tabs: [
-							Tab(
-								text: "Dashboard",
-								icon: Icon(Icons.dashboard),
-							),
-							Tab(
-								text: "Receitas",
-								icon: Icon(Icons.trending_up),
-							),
-							Tab(
-								text: "Despesas",
-								icon: Icon(Icons.trending_down),
-							)
-						]
-					),
 				),
-				body: TabBarView(
-					children: [
-						DashboardScreen(),
-						ReceitasScreen(),
-						DespesasScreen(),
-					]
+				body: _widgetsOptions.elementAt(_selectedIndex),
+				bottomNavigationBar: BottomNavigationBar(
+					items: const <BottomNavigationBarItem> [
+						BottomNavigationBarItem(
+							title: Text("Dashboard"),
+							icon: Icon(Icons.dashboard),
+						),
+						BottomNavigationBarItem(
+							title: Text("Receitas"),
+							icon: Icon(Icons.trending_up),
+						),
+						BottomNavigationBarItem(
+							title: Text("Despesas"),
+							icon: Icon(Icons.trending_down),
+						)
+					],
+					currentIndex: _selectedIndex,
+					selectedItemColor: Colors.white,
+					backgroundColor: Colors.blue,
+					unselectedItemColor: Colors.white70,
+					onTap: _onItemTapped,
 				),
 			)
 		);
