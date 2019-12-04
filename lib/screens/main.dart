@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -102,6 +103,7 @@ class DashboardScreen extends StatelessWidget {
 	static Series<Base, DateTime> _totais;
 	static bool created = false;
 	static dynamic valor = 0;
+	final formatCurrency = new NumberFormat.simpleCurrency(locale: 'pt-BR');
 
 	DashboardScreen();
 
@@ -119,7 +121,7 @@ class DashboardScreen extends StatelessWidget {
 										fontSize: 20,
 										fontWeight: FontWeight.bold
 									)),
-									Text(valor.toString(), style: TextStyle(
+									Text('${formatCurrency.format(valor)}', style: TextStyle(
 										fontSize: 20
 									))
 								],
