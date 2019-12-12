@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
 				.isSigned()
 				.then((isSigned) {
 				if (isSigned) {
-					Navigator.of(context).pushReplacementNamed("/main");
+					Navigator.of(context).pushNamedAndRemoveUntil("/main", (Route<dynamic> route) => false);
 				}
 			});
 		}
