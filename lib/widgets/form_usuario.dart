@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canhanho/repositories/usuario.dart';
 import 'package:canhanho/utils/validator_usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,8 +63,9 @@ class _FormUsuarioState extends State<FormUsuario> {
 										Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
 									new ClipRRect(
 										borderRadius: new BorderRadius.circular(180.0),
-										child: Image.network(
-											Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
+										child: CachedNetworkImage(
+											imageUrl: Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
+											placeholder: (context, url) => CircularProgressIndicator(),
 											width: 120,
 											height: 120,
 										),

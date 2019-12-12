@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:canhanho/repositories/base.dart';
 import 'package:canhanho/repositories/despesa.dart';
 import 'package:canhanho/repositories/receita.dart';
@@ -47,8 +48,9 @@ class _MainScreenState extends State<MainScreen> {
 								Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
 								new ClipRRect(
 									borderRadius: new BorderRadius.circular(180.0),
-									child: Image.network(
-										Provider.of<UsuarioModel>(context).usuario.photoUrl,
+									child: CachedNetworkImage(
+										imageUrl: Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
+										placeholder: (context, url) => CircularProgressIndicator(),
 										width: 40,
 										height: 40,
 									),
