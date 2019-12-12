@@ -59,7 +59,32 @@ class _FormUsuarioState extends State<FormUsuario> {
 						child: Column(
 							children: <Widget>[
 								GestureDetector(
-									child: Provider.of<UsuarioModel>(context).usuario != null &&
+									child: _file != null ?
+										new ClipRRect(
+											borderRadius: new BorderRadius.circular(180.0),
+											child: Image.file(
+												_file,
+												width: 120,
+												height: 120,
+											),
+										) : (
+										Provider.of<UsuarioModel>(context).usuario != null &&
+											Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
+										new ClipRRect(
+											borderRadius: new BorderRadius.circular(180.0),
+											child: CachedNetworkImage(
+												imageUrl: Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
+												placeholder: (context, url) => CircularProgressIndicator(),
+												width: 120,
+												height: 120,
+											),
+										) :
+										Icon(
+											Icons.account_circle,
+											size: 120,
+										)
+									),
+									/*child: Provider.of<UsuarioModel>(context).usuario != null &&
 										Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
 									new ClipRRect(
 										borderRadius: new BorderRadius.circular(180.0),
@@ -83,7 +108,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 										Icons.account_circle,
 										size: 120,
 									)
-									),
+									),*/
 									onTap: _pickPhoto,
 								),
 								TextFormField(
@@ -191,6 +216,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 		_emailController.text = widget.userInfo.email;
 		_newPasswordController.text = "";
 		_oldPasswordController.text = "";
+		_file = null;
 		setState(() {
 			_passwordEdited = false;
 		});
