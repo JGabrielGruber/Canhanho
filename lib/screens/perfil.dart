@@ -54,38 +54,41 @@ class _PerfilScreenState extends State<PerfilScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Perfil'),
-      ),
-      body: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              FormUsuario(
-                isEdit: true,
-                userInfo: Provider.of<UsuarioModel>(context).usuario,
-                updateInfo: Provider.of<UsuarioModel>(context).updateProfile,
+        appBar: AppBar(
+          title: Text('Perfil'),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                children: <Widget>[
+                  FormUsuario(
+                    isEdit: true,
+                    userInfo: Provider.of<UsuarioModel>(context).usuario,
+                    updateInfo: Provider.of<UsuarioModel>(context).updateProfile,
 
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FlatButton(
-                      onPressed: _showConfirmacao,
-                      child: Text(
-                        'SAIR',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      )),
-                ),
-              ),
+                  ),
+                  const SizedBox(height: 170.0),
+                  Container(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FlatButton(
+                          onPressed: _showConfirmacao,
+                          child: Text(
+                            'SAIR',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          )),
+                    ),
+                  ),
 
-            ],
-          )
+                ],
+              )
 
-      ),
+          ),
+        )
     );
   }
 
