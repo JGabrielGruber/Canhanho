@@ -84,31 +84,6 @@ class _FormUsuarioState extends State<FormUsuario> {
 											size: 120,
 										)
 									),
-									/*child: Provider.of<UsuarioModel>(context).usuario != null &&
-										Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
-									new ClipRRect(
-										borderRadius: new BorderRadius.circular(180.0),
-										child: CachedNetworkImage(
-											imageUrl: Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
-											placeholder: (context, url) => CircularProgressIndicator(),
-											width: 120,
-											height: 120,
-										),
-									) :
-									(_file != null ?
-									new ClipRRect(
-										borderRadius: new BorderRadius.circular(180.0),
-										child: Image.file(
-											_file,
-											width: 120,
-											height: 120,
-										),
-									) :
-									Icon(
-										Icons.account_circle,
-										size: 120,
-									)
-									),*/
 									onTap: _pickPhoto,
 								),
 								TextFormField(
