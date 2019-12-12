@@ -4,6 +4,7 @@ import 'package:canhanho/repositories/despesa.dart';
 import 'package:canhanho/repositories/receita.dart';
 import 'package:canhanho/widgets/custom_paginated_data_table.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TableBase extends StatefulWidget {
 
@@ -46,6 +47,8 @@ class _TableBaseState extends State<TableBase> {
 
 class BaseDataSource extends DataTableSource {
 
+	final formatCurrency = new NumberFormat.simpleCurrency(locale: 'pt-BR');
+
 	final List<Base> list;
 	int _selectedCount = 0;
 	Function onSelected;
@@ -66,7 +69,7 @@ class BaseDataSource extends DataTableSource {
 		return DataRow.byIndex(
 			index: index,
 			cells: <DataCell> [
-				DataCell(Text("${item.valor.toString()}"), onTap: () {this.onSelected(base);}),
+				DataCell(Text("${formatCurrency.format(item.valor)}"), onTap: () {this.onSelected(base);}),
 				DataCell(Text("${item.descricao}"), onTap: () {this.onSelected(base);}),
 				DataCell(Text("${item.data.toDate().toString()}"), onTap: () {this.onSelected(base);}),
 			]
