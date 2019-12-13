@@ -144,7 +144,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 								dateTimeFactory: const LocalDateTimeFactory(),
 								behaviors: [
 									SeriesLegend(
-										showMeasures: true
+										showMeasures: true,
+										horizontalFirst: false,
+										measureFormatter: (num valor) {
+											if (valor != null) {
+												return formatCurrency.format(valor);
+											} else {
+												return "";
+											}
+										},
+										outsideJustification: OutsideJustification.start,
 									),
 								],
 								animate: false,
@@ -209,7 +218,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 					}
 				});
 				_total = _createTotais(_dataReceita, _dataDespesa);
-				print("MAHOI");
 				_totais = new Series<Base, DateTime>(
 					id: 'Totais',
 					colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
@@ -229,7 +237,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 							i = item as Despesa;
 						return i.valor;
 					},
-					data: _total
+					data: _total,
+					measureFormatterFn: (Base base, int valor) {
+						print(base);
+						print(valor);
+						return (num valor) {
+							if (valor != null) {
+								return formatCurrency.format(valor);
+							} else {
+								return "";
+							}
+						};
+					}
 				);
 			}
 
@@ -283,9 +302,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 		}
 
 		return [
+			_totais,
 			_receitas,
-			_despesas,
-			_totais
+			_despesas
 		];
 	}
 
