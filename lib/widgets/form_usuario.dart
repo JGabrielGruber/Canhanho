@@ -129,6 +129,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 										controller: _oldPasswordController,
 										validator: passwordValidator,
 										decoration: const InputDecoration(
+											icon: Icon(Icons.security),
 											labelText: "Antiga senha",
 										),
 										obscureText: true,
