@@ -72,7 +72,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 											Provider.of<UsuarioModel>(context).usuario.photoUrl != null ?
 										new ClipRRect(
 											borderRadius: new BorderRadius.circular(180.0),
-											child: CachedNetworkImage(
+											child: new CachedNetworkImage(
 												imageUrl: Provider.of<UsuarioModel>(context, listen: true).usuario.photoUrl,
 												placeholder: (context, url) => CircularProgressIndicator(),
 												width: 120,

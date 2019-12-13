@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -102,18 +103,23 @@ class UsuarioModel extends ChangeNotifier {
 	}
 
 	Future<FirebaseUser> updatePhoto(File file) async {
-		if (_reference == null && _usuario != null) {
+		if (_usuario != null) {
+			_reference = _firebaseStorage.ref()
+				.child(_usuario.photoUrl);
+			try {
+				await _reference.delete();
+			} catch (e){}
 			_reference = _firebaseStorage.ref()
 				.child(
-				"users/${_usuario.uid}"
+				"users/${_usuario.uid}_${Timestamp.now().microsecondsSinceEpoch}"
 			);
+			await _reference.putFile(file).onComplete;
+			var info = UserUpdateInfo();
+			info.photoUrl = await _reference.getDownloadURL();
+			await _usuario.updateProfile(info);
+			_usuario = await _firebaseAuth.currentUser();
+			notifyListeners();
 		}
-		await _reference.putFile(file).onComplete;
-		var info = UserUpdateInfo();
-		info.photoUrl = await _reference.getDownloadURL();
-		print(info.photoUrl);
-		await _usuario.updateProfile(info);
-		print(_usuario.photoUrl);
 		return _usuario;
 	}
 }
