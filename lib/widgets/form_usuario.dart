@@ -81,6 +81,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 										) :
 										Icon(
 											Icons.account_circle,
+											color: Colors.grey,
 											size: 120,
 										)
 									),
