@@ -72,19 +72,30 @@ class UsuarioModel extends ChangeNotifier {
 		String old_password,
 		File file
 		) async {
-		_usuario.updateProfile(userUpdateInfo);
-		if (email != null)
+
+		if (userUpdateInfo != null) {
+			await _usuario.updateProfile(userUpdateInfo);
+			_usuario = await _firebaseAuth.currentUser();
+		}
+		if (email != null) {
 			await _usuario.updateEmail(email);
+			_usuario = await _firebaseAuth.currentUser();
+		}
+
 		if (old_password != null)
 			await _firebaseAuth.signInWithEmailAndPassword(
 				email: _usuario.email,
 				password: old_password
 			);
+
 		if (new_password != null)
-			_usuario.updatePassword(new_password);
-		print(file.path);
+			await _usuario.updatePassword(new_password);
+
 		if (file != null)
 			updatePhoto(file);
+
+		_usuario = await _firebaseAuth.currentUser();
+
 		notifyListeners();
 		return _usuario;
 	}
