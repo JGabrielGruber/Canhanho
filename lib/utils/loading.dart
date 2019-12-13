@@ -1,11 +1,18 @@
-class LoadingState {
+import 'package:flutter/cupertino.dart';
+
+class LoadingState extends ChangeNotifier {
 	static bool _loading = false;
 
-	static bool isLoading() {
+	LoadingState();
+
+	bool isLoading() {
 		return _loading;
 	}
 
-	static bool setLoading(bool loading) {
-		return _loading = loading;
+	bool setLoading(bool loading) {
+		_loading = loading;
+		print(_loading);
+		notifyListeners();
+		return _loading;
 	}
 }

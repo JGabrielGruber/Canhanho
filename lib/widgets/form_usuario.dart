@@ -7,8 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:canhanho/utils/loading.dart';
-import 'package:canhanho/widgets/loading.dart';
 
 class FormUsuario extends StatefulWidget {
 
@@ -53,7 +51,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 
 	@override
 	Widget build(BuildContext context) {
-		return LoadingState.isLoading()  ? Loading() : SafeArea(
+		return SafeArea(
 			child: Column(
 				children: <Widget>[
 					Form(
@@ -174,7 +172,6 @@ class _FormUsuarioState extends State<FormUsuario> {
 								color: Colors.blue,
 								textColor: Colors.white,
 								onPressed: () {
-									LoadingState.setLoading(true);
 									print((widget.isEdit ? true : widget.termos));
 									if (_formKey.currentState.validate()
 										&& (widget.isEdit ? true : widget.termos)) {

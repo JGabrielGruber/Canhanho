@@ -19,11 +19,15 @@ class _LoginScreenState extends State<LoginScreen> {
 	@override
 	Widget build(BuildContext context) {
 		checkSign();
-		return LoadingState.isLoading() ? Loading()  : Scaffold(
+		return Scaffold(
 			body: SafeArea(
 				child: ListView(
 					padding: const EdgeInsets.symmetric(horizontal: 24.0),
 					children: <Widget>[
+						Loading(),
+						FloatingActionButton(
+							onPressed: () => Provider.of<LoadingState>(context).setLoading(!Provider.of<LoadingState>(context).isLoading())
+						),
 						const SizedBox(height: 50.0),
 						Column(
 							children: <Widget>[
@@ -69,9 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
 							textColor: Colors.white,
 							onPressed: () {
 								if (_formKey.currentState.validate())
-									LoadingState.setLoading(true);
 									logIn();
-
 							},
 
 						),
@@ -89,7 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
 	}
 
 	void logIn() async {
-		LoadingState.setLoading(true);
 		Provider.of<UsuarioModel>(context, listen: false)
 			.signIn(
 			_emailController.text,
@@ -99,7 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
 			.catchError((error) {
 				switch (error.code) {
 					case "ERROR_USER_NOT_FOUND":
-						LoadingState.setLoading(false);
 						showDialog(
 							context: context,
 							builder: (BuildContext context) {
@@ -122,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
 							});
 						break;
 					case "ERROR_WRONG_PASSWORD":
-						LoadingState.setLoading(false);
 						showDialog(
 							context: context,
 							builder: (BuildContext context) {
@@ -145,7 +144,6 @@ class _LoginScreenState extends State<LoginScreen> {
 							});
 						break;
 					default:
-						LoadingState.setLoading(false);
 						showDialog(
 							context: context,
 							builder: (BuildContext context) {
