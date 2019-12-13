@@ -1,9 +1,7 @@
 import 'package:canhanho/repositories/usuario.dart';
 import 'package:canhanho/utils/validator_usuario.dart';
-import 'package:canhanho/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:canhanho/widgets/loading.dart';
 
 class LoginScreen extends StatefulWidget {
 	@override
@@ -15,12 +13,11 @@ class _LoginScreenState extends State<LoginScreen> {
 	final _formKey = GlobalKey<FormState>();
 	final TextEditingController _emailController = TextEditingController();
 	final TextEditingController _passwordController = TextEditingController();
-	bool loading = false;
 
 	@override
 	Widget build(BuildContext context) {
 		checkSign();
-		return loading ? Loading()  : Scaffold(
+		return Scaffold(
 			body: SafeArea(
 				child: ListView(
 					padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -70,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
 							textColor: Colors.white,
 							onPressed: () {
 								if (_formKey.currentState.validate())
-
 									logIn();
 							},
 
@@ -82,14 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
 								signIn();
 							},
 						),
-						FlatButton(
-							child: const Text("teste loading"),
-							onPressed: () {
-								setState(() {
-									loading = true;
-								});
-							},
-						)
 					],
 				),
 			),
