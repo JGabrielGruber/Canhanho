@@ -115,9 +115,9 @@ class UsuarioModel extends ChangeNotifier {
 
 	Future<FirebaseUser> updatePhoto(File file) async {
 		if (_usuario != null) {
-			_reference = _firebaseStorage.ref()
-				.child(_usuario.photoUrl);
 			try {
+				_reference = _firebaseStorage.ref()
+					.child(_usuario.photoUrl);
 				await _reference.delete();
 			} catch (e){}
 			_reference = _firebaseStorage.ref()
