@@ -2,6 +2,8 @@ import 'package:canhanho/repositories/usuario.dart';
 import 'package:canhanho/widgets/form_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:canhanho/widgets/loading.dart';
+import 'package:canhanho/utils/loading.dart';
 
 class PerfilScreen extends StatefulWidget {
   @override
@@ -53,7 +55,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return LoadingState.isLoading() ? Loading() : Scaffold(
       appBar: AppBar(
         title: Text('Perfil'),
       ),

@@ -1,5 +1,5 @@
 class LoadingState {
-	static bool _loading;
+	static bool _loading = false;
 
 	static bool isLoading() {
 		return _loading;

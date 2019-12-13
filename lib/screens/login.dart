@@ -15,12 +15,11 @@ class _LoginScreenState extends State<LoginScreen> {
 	final _formKey = GlobalKey<FormState>();
 	final TextEditingController _emailController = TextEditingController();
 	final TextEditingController _passwordController = TextEditingController();
-	bool loading = false;
 
 	@override
 	Widget build(BuildContext context) {
 		checkSign();
-		return loading ? Loading()  : Scaffold(
+		return LoadingState.isLoading() ? Loading()  : Scaffold(
 			body: SafeArea(
 				child: ListView(
 					padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -70,8 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
 							textColor: Colors.white,
 							onPressed: () {
 								if (_formKey.currentState.validate())
-
+									LoadingState.setLoading(true);
 									logIn();
+
 							},
 
 						),
@@ -82,14 +82,6 @@ class _LoginScreenState extends State<LoginScreen> {
 								signIn();
 							},
 						),
-						FlatButton(
-							child: const Text("teste loading"),
-							onPressed: () {
-								setState(() {
-									loading = true;
-								});
-							},
-						)
 					],
 				),
 			),
@@ -97,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
 	}
 
 	void logIn() async {
+		LoadingState.setLoading(true);
 		Provider.of<UsuarioModel>(context, listen: false)
 			.signIn(
 			_emailController.text,
@@ -106,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
 			.catchError((error) {
 				switch (error.code) {
 					case "ERROR_USER_NOT_FOUND":
+						LoadingState.setLoading(false);
 						showDialog(
 							context: context,
 							builder: (BuildContext context) {
@@ -128,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
 							});
 						break;
 					case "ERROR_WRONG_PASSWORD":
+						LoadingState.setLoading(false);
 						showDialog(
 							context: context,
 							builder: (BuildContext context) {
@@ -150,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
 							});
 						break;
 					default:
+						LoadingState.setLoading(false);
 						showDialog(
 							context: context,
 							builder: (BuildContext context) {

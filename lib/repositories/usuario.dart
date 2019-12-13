@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:canhanho/utils/loading.dart';
 
 class User implements UserInfo {
 	String email = "";
@@ -32,11 +33,14 @@ class UsuarioModel extends ChangeNotifier {
 	}
 
 	Future<AuthResult> signIn(String email, String password) async {
+		LoadingState.setLoading(true);
+
 		AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
 			email: email,
 			password: password
 		);
 		_usuario = result.user;
+		LoadingState.setLoading(false);
 
 		notifyListeners();
 		return result;
@@ -61,6 +65,9 @@ class UsuarioModel extends ChangeNotifier {
 			updatePhoto(file);
 
 		notifyListeners();
+
+		LoadingState.setLoading(false);
+
 		return result;
 	}
 
@@ -85,6 +92,9 @@ class UsuarioModel extends ChangeNotifier {
 		if (file != null)
 			updatePhoto(file);
 		notifyListeners();
+
+		LoadingState.setLoading(false);
+
 		return _usuario;
 	}
 
