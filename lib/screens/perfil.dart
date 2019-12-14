@@ -57,35 +57,34 @@ class _PerfilScreenState extends State<PerfilScreen> {
       appBar: AppBar(
         title: Text('Perfil'),
       ),
-      body: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              FormUsuario(
-                isEdit: true,
-                userInfo: Provider.of<UsuarioModel>(context).usuario,
-                updateInfo: Provider.of<UsuarioModel>(context).updateProfile,
+      body: SingleChildScrollView(
+        child: Container(
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              children: <Widget>[
+                FormUsuario(
+                  isEdit: true,
+                  userInfo: Provider.of<UsuarioModel>(context).usuario,
+                  updateInfo: Provider.of<UsuarioModel>(context).updateProfile,
 
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FlatButton(
-                      onPressed: _showConfirmacao,
-                      child: Text(
-                        'SAIR',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      )),
                 ),
-              ),
-
-            ],
-          )
-
-      ),
+                const SizedBox(height: 75.0),
+                 Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FlatButton(
+                        onPressed: _showConfirmacao,
+                        child: Text(
+                          'SAIR',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        )),
+                  ),
+              ],
+            )
+        ),
+      )
     );
   }
 
