@@ -96,59 +96,88 @@ class _MainScreenState extends State<MainScreen> {
 	}
 }
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
 	static List<Receita> _dataReceita = List<Receita>();
 	static List<Despesa> _dataDespesa = List<Despesa>();
 	static List<Base> _total = List<Base>();
 	static Series<Receita, DateTime> _receitas;
 	static Series<Despesa, DateTime> _despesas;
 	static Series<Base, DateTime> _totais;
-	static bool created = false;
 	static dynamic valor = 0;
 	final formatCurrency = new NumberFormat.simpleCurrency(locale: 'pt-BR');
 
-	DashboardScreen();
+	@override
+	void initState() {
+		super.initState();
+		_getData();
+	}
 
 	@override
 	Widget build(BuildContext context) {
 		return SingleChildScrollView(
 			scrollDirection: prefix0.Axis.vertical,
 			child: Container(
-					padding: EdgeInsets.all(20),
-					child: Column(
-						children: <Widget>[
-							Row(
-								children: <Widget>[
-									Text("Total atual: ", style: TextStyle(
-										fontSize: 20,
-										fontWeight: FontWeight.bold
-									)),
-									Text('${formatCurrency.format(valor)}', style: TextStyle(
-										fontSize: 20
-									))
+				padding: EdgeInsets.all(20),
+				child: Column(
+					children: <Widget>[
+						Row(
+							children: <Widget>[
+								Text("Total atual: ", style: TextStyle(
+									fontSize: 20,
+									fontWeight: FontWeight.bold
+								)),
+								Text('${formatCurrency.format(valor)}', style: TextStyle(
+									fontSize: 20
+								))
+							],
+						),
+						Padding(padding: EdgeInsets.all(5)),
+						new SizedBox(
+							height: 550,
+							child: TimeSeriesChart(
+								_createSeries(context),
+								dateTimeFactory: const LocalDateTimeFactory(),
+								behaviors: [
+									SeriesLegend(
+										showMeasures: true,
+										horizontalFirst: false,
+										measureFormatter: (num valor) {
+											if (valor != null) {
+												return formatCurrency.format(valor);
+											} else {
+												return "";
+											}
+										},
+										outsideJustification: OutsideJustification.start,
+									),
+								],
+								animate: false,
+								defaultRenderer: LineRendererConfig(
+									includePoints: true,
+									includeArea: false,
+									includeLine: true,
+									roundEndCaps: true,
+								),
+								selectionModels: [
+									new SelectionModelConfig(
+										type: SelectionModelType.info,
+									)
 								],
 							),
-							Padding(padding: EdgeInsets.all(5)),
-							new SizedBox(
-								height: 400,
-								child: new TimeSeriesChart(
-									_createSeries(context),
-									dateTimeFactory: const LocalDateTimeFactory(),
-									behaviors: [
-										new SeriesLegend()
-									],
-									animate: false,
-									defaultRenderer: LineRendererConfig(includePoints: true),
-								),
-							),
-						],
-					),
+						),
+					],
 				),
+			),
 		);
 	}
 
-	/// Create one series with sample hard coded data.
-	static List<Series<Base, DateTime>> _createSeries(BuildContext context) {
+	Future _getData() async {
+		await Future.delayed(Duration.zero);
 		Provider.of<ReceitaListModel>(context).get().then((ObserverList<Receita> observerList) {
 			if (observerList.length != _dataReceita.length) {
 				observerList.forEach((Receita receita) {
@@ -156,6 +185,28 @@ class DashboardScreen extends StatelessWidget {
 						_dataReceita.add(receita);
 					}
 				});
+				_total = _createTotais(_dataReceita, _dataDespesa);
+				_totais = new Series<Base, DateTime>(
+					id: 'Totais',
+					colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+					domainFn: (item, _) {
+						var i;
+						if (item is Receita)
+							i = item as Receita;
+						else
+							i = item as Despesa;
+						return i.data.toDate();
+					},
+					measureFn: (item, _) {
+						var i;
+						if (item is Receita)
+							i = item as Receita;
+						else
+							i = item as Despesa;
+						return i.valor;
+					},
+					data: _total
+				);
 			}
 		});
 
@@ -166,10 +217,45 @@ class DashboardScreen extends StatelessWidget {
 						_dataDespesa.add(despesa);
 					}
 				});
+				_total = _createTotais(_dataReceita, _dataDespesa);
+				_totais = new Series<Base, DateTime>(
+					id: 'Totais',
+					colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+					domainFn: (item, _) {
+						var i;
+						if (item is Receita)
+							i = item as Receita;
+						else
+							i = item as Despesa;
+						return i.data.toDate();
+					},
+					measureFn: (item, _) {
+						var i;
+						if (item is Receita)
+							i = item as Receita;
+						else
+							i = item as Despesa;
+						return i.valor;
+					},
+					data: _total,
+					measureFormatterFn: (Base base, int valor) {
+						print(base);
+						print(valor);
+						return (num valor) {
+							if (valor != null) {
+								return formatCurrency.format(valor);
+							} else {
+								return "";
+							}
+						};
+					}
+				);
 			}
-		});
 
-		_total = _createTotais(_dataReceita, _dataDespesa);
+		});
+	}
+
+	static List<Series<Base, DateTime>> _createSeries(BuildContext context) {
 
 		if (_receitas == null) {
 			_receitas = new Series<Receita, DateTime>(
@@ -191,32 +277,34 @@ class DashboardScreen extends StatelessWidget {
 			);
 		}
 
-		_totais = new Series<Base, DateTime>(
-			id: 'Totais',
-			colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
-			domainFn: (item, _) {
-				var i;
-				if (item is Receita)
-					i = item as Receita;
-				else
-					i = item as Despesa;
-				return i.data.toDate();
-			},
-			measureFn: (item, _) {
-				var i;
-				if (item is Receita)
-					i = item as Receita;
-				else
-					i = item as Despesa;
-				return i.valor;
-			},
-			data: _total
-		);
+		if (_totais == null) {
+			_totais = new Series<Base, DateTime>(
+				id: 'Totais',
+				colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+				domainFn: (item, _) {
+					var i;
+					if (item is Receita)
+						i = item as Receita;
+					else
+						i = item as Despesa;
+					return i.data.toDate();
+				},
+				measureFn: (item, _) {
+					var i;
+					if (item is Receita)
+						i = item as Receita;
+					else
+						i = item as Despesa;
+					return i.valor;
+				},
+				data: _total
+			);
+		}
 
 		return [
+			_totais,
 			_receitas,
-			_despesas,
-			_totais
+			_despesas
 		];
 	}
 
@@ -291,5 +379,4 @@ class DashboardScreen extends StatelessWidget {
 
 		return total;
 	}
-
 }
