@@ -9,12 +9,21 @@ class Loading extends StatelessWidget {
 	Widget build(BuildContext context) {
 		return Visibility(
 			child: Container(
-				child: Center(
-					child: SpinKitChasingDots(
-						color: Colors.blue,
-						size: 50.0,
-					),
-				),
+				height: 500,
+				child: Column(
+					children: <Widget> [
+						Expanded(
+							child: Align(
+								alignment: Alignment.center,
+								child: SpinKitPouringHourglass(
+									color: Colors.blue,
+									size: 50.0,
+								),
+							),
+						)
+
+		]
+				)
 			),
 			visible: Provider.of<LoadingState>(context, listen: true).isLoading(),
 		);
