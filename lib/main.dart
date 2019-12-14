@@ -1,7 +1,6 @@
 import 'package:canhanho/repositories/despesa.dart';
 import 'package:canhanho/repositories/receita.dart';
 import 'package:canhanho/repositories/usuario.dart';
-import 'package:canhanho/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import "routes.dart";
@@ -13,7 +12,6 @@ void main() => runApp(
             ChangeNotifierProvider(builder: (context) => UsuarioModel()),
             ChangeNotifierProvider(builder: (context) => ReceitaListModel()),
             ChangeNotifierProvider(builder: (context) => DespesaListModel()),
-            ChangeNotifierProvider(builder: (context) => LoadingState()),
         ],
         child: MaterialApp(
             title: "Canhanho",
