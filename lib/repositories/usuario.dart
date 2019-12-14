@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:canhanho/widgets/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:load/load.dart';
 
 class User implements UserInfo {
 	String email = "";
@@ -34,12 +36,14 @@ class UsuarioModel extends ChangeNotifier {
 	}
 
 	Future<AuthResult> signIn(String email, String password) async {
+		showCustomLoadingWidget(Loading());
 		AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
 			email: email,
 			password: password
 		);
 		_usuario = result.user;
 		notifyListeners();
+		hideLoadingDialog();
 		return result;
 	}
 
@@ -49,6 +53,7 @@ class UsuarioModel extends ChangeNotifier {
 		String password,
 		File file
 		) async {
+		showCustomLoadingWidget(Loading());
 		AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
 			email: email,
 			password: password
@@ -62,6 +67,7 @@ class UsuarioModel extends ChangeNotifier {
 			updatePhoto(file);
 
 		notifyListeners();
+		hideLoadingDialog();
 		return result;
 	}
 
@@ -72,7 +78,7 @@ class UsuarioModel extends ChangeNotifier {
 		String old_password,
 		File file
 		) async {
-
+		showCustomLoadingWidget(Loading());
 		if (userUpdateInfo != null) {
 			await _usuario.updateProfile(userUpdateInfo);
 			_usuario = await _firebaseAuth.currentUser();
@@ -92,17 +98,19 @@ class UsuarioModel extends ChangeNotifier {
 			await _usuario.updatePassword(new_password);
 
 		if (file != null)
-			updatePhoto(file);
+			await updatePhoto(file);
 
 		_usuario = await _firebaseAuth.currentUser();
 
 		notifyListeners();
-
+		hideLoadingDialog();
 		return _usuario;
 	}
 
 	Future<bool> isSigned() async {
+		showCustomLoadingWidget(Loading());
 		_usuario = await _firebaseAuth.currentUser();
+		hideLoadingDialog();
 		if (_usuario != null) {
 			return true;
 		} else {
@@ -115,6 +123,7 @@ class UsuarioModel extends ChangeNotifier {
 	}
 
 	Future<FirebaseUser> updatePhoto(File file) async {
+		showCustomLoadingWidget(Loading());
 		if (_usuario != null) {
 			try {
 				_reference = _firebaseStorage.ref()
@@ -142,6 +151,7 @@ class UsuarioModel extends ChangeNotifier {
 			await _usuario.updateProfile(info);
 			_usuario = await _firebaseAuth.currentUser();
 			notifyListeners();
+			hideLoadingDialog();
 		}
 		return _usuario;
 	}

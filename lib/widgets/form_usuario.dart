@@ -5,6 +5,7 @@ import 'package:canhanho/utils/validator_usuario.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:load/load.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -239,6 +240,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 					});
 			}).catchError((error) {
 				print(error);
+				hideLoadingDialog();
 				if (error.code != null) {
 					switch (error.code) {
 						case "ERROR_WRONG_PASSWORD":
@@ -294,6 +296,7 @@ class _FormUsuarioState extends State<FormUsuario> {
 				newPassword,
 				_file
 			).catchError((error) {
+				hideLoadingDialog();
 				showDialog(
 					context: context,
 					builder: (BuildContext context) {
