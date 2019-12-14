@@ -1,7 +1,9 @@
 import 'package:canhanho/repositories/usuario.dart';
 import 'package:canhanho/utils/validator_usuario.dart';
+import 'package:canhanho/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:canhanho/widgets/loading.dart';
 
 class LoginScreen extends StatefulWidget {
 	@override
@@ -22,6 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
 				child: ListView(
 					padding: const EdgeInsets.symmetric(horizontal: 24.0),
 					children: <Widget>[
+						Loading(),
+						FloatingActionButton(
+							onPressed: () => Provider.of<LoadingState>(context).setLoading(!Provider.of<LoadingState>(context).isLoading())
+						),
 						const SizedBox(height: 50.0),
 						Column(
 							children: <Widget>[

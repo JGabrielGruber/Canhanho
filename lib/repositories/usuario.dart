@@ -39,7 +39,6 @@ class UsuarioModel extends ChangeNotifier {
 			password: password
 		);
 		_usuario = result.user;
-
 		notifyListeners();
 		return result;
 	}
@@ -98,6 +97,7 @@ class UsuarioModel extends ChangeNotifier {
 		_usuario = await _firebaseAuth.currentUser();
 
 		notifyListeners();
+
 		return _usuario;
 	}
 
