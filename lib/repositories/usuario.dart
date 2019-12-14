@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class User implements UserInfo {
 	String email = "";
@@ -124,6 +125,17 @@ class UsuarioModel extends ChangeNotifier {
 				.child(
 				"users/${_usuario.uid}_${Timestamp.now().microsecondsSinceEpoch}"
 			);
+			try {
+				var path = file.absolute.path + Timestamp.now().toString();
+
+				await FlutterImageCompress.compressAndGetFile(
+					file.absolute.path, path,
+					quality: 60,
+					minHeight: 1920,
+					minWidth: 1080,
+				);
+				file = await File(path);
+			} catch (e){}
 			await _reference.putFile(file).onComplete;
 			var info = UserUpdateInfo();
 			info.photoUrl = await _reference.getDownloadURL();
